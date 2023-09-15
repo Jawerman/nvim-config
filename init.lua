@@ -1,0 +1,2 @@
+require("jawer")
+print("hello")
