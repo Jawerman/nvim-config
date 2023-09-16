@@ -1,2 +1,1 @@
 require("jawer")
-print("hello")

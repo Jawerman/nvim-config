@@ -1,2 +1,2 @@
 require("jawer.remap")
-print("hello from Jawer")
+require("jawer.set")
