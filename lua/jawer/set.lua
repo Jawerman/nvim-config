@@ -1,6 +1,8 @@
+vim.opt.background = "dark"
 -- relative numbers
 vim.opt.nu = true
 vim.opt.relativenumber = true
+
 
 -- tabs
 local tabSize = 2
@@ -44,4 +46,10 @@ vim.g.mapleader = " "
 vim.opt.list = true
 
 -- show hidden characters
-vim.opt.listchars="nbsp:¬,extends:»,precedes:«,trail:•"
+-- vim.opt.listchars="nbsp:¬,extends:»,precedes:«,trail:•"
+--
+-- Define la función CamelToSnake
+
+
+-- Asocia la función a una combinación de teclas
+
