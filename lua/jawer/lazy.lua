@@ -1,16 +1,22 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
--- Only required if you have packer configured as `opt`
-vim.cmd [[packadd packer.nvim]]
-
-return require('packer').startup(function(use)
-  -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
-
-  use {
-    'nvim-telescope/telescope.nvim', tag = '0.1.3',
+require("lazy").setup({
+  -- 'wbthomason/packer.nvim',
+  {
+    'nvim-telescope/telescope.nvim', tag = '0.1.6',
     -- or                            , branch = '0.1.x',
-    requires = {
+    dependencies = {
       { 'nvim-lua/plenary.nvim' },
       { 'nvim-telescope/telescope-live-grep-args.nvim' },
       { 'molecule-man/telescope-menufacture' },
@@ -21,41 +27,42 @@ return require('packer').startup(function(use)
       require("telescope").load_extension("menufacture")
       require("telescope").load_extension("zf-native")
     end
-  }
-
-  use({
+  },
+  {
     'rose-pine/neovim',
     as = 'rose-pine',
     config = function()
       vim.cmd('colorscheme rose-pine')
     end
-  })
-
-  use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
-  use('nvim-treesitter/playground')
-  use('mbbill/undotree')
-
-  use('tpope/vim-fugitive')
-  use('tpope/vim-surround')
-  use('tpope/vim-projectionist')
-  use('tpope/vim-repeat')
-  use('tpope/vim-commentary')
-
-  use('jiangmiao/auto-pairs')
-  use('justinmk/vim-sneak')
-  use('machakann/vim-highlightedyank')
-  use('editorconfig/editorconfig-vim')
-  use('Asheq/close-buffers.vim')
-  use('preservim/nerdtree')
-  use {
+  },
+  {
+    'nvim-treesitter/nvim-treesitter',
+     build = ':TSUpdate',
+  },
+  'nvim-treesitter/playground',
+  'mbbill/undotree',
+  'nvim-tree/nvim-tree.lua',
+  'tpope/vim-fugitive',
+  'tpope/vim-surround',
+  'tpope/vim-projectionist',
+  'tpope/vim-repeat',
+  'tpope/vim-commentary',
+  'jiangmiao/auto-pairs',
+  'justinmk/vim-sneak',
+  {'lewis6991/gitsigns.nvim', config = function ()
+    require('gitsigns').setup()
+  end},
+  'machakann/vim-highlightedyank',
+  'editorconfig/editorconfig-vim',
+  'Asheq/close-buffers.vim',
+  {
     'nvim-lualine/lualine.nvim',
-    requires = { 'nvim-tree/nvim-web-devicons', opt = true }
-  }
-
-  use {
+    dependencies = { 'nvim-tree/nvim-web-devicons', opt = true }
+  },
+  {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v3.x',
-    requires = {
+    dependencies = {
       --- Uncomment these if you want to manage LSP servers from neovim
       { 'williamboman/mason.nvim' },
       { 'williamboman/mason-lspconfig.nvim' },
@@ -67,15 +74,13 @@ return require('packer').startup(function(use)
       { 'hrsh7th/cmp-nvim-lsp' },
       { 'L3MON4D3/LuaSnip' },
     }
-  }
-
-  use {
+  },
+  {
     'prettier/vim-prettier',
     -- run = 'npm install',
     -- ft = {'javascript', 'typescript', 'css', 'less', 'scss', 'graphql', 'markdown', 'vue', 'html'}
-  }
-
-  use('mogelbrod/vim-jsonpath')
+  },
+  'mogelbrod/vim-jsonpath',
 
   -- Harpoon 2
 
@@ -83,9 +88,10 @@ return require('packer').startup(function(use)
   -- use {
   --   "ThePrimeagen/harpoon",
   --   branch = "harpoon2",
-  --   requires = { { "nvim-lua/plenary.nvim" } }
+  --   dependencies = { { "nvim-lua/plenary.nvim" } }
   -- }
 
 
-  use('lvimuser/lsp-inlayhints.nvim')
-end)
+  'lvimuser/lsp-inlayhints.nvim',
+
+})
