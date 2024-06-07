@@ -1,4 +1,3 @@
-
 vim.g.NERDTreeWinPos = "right"
 vim.g.NERDTreeWinSize = 100
 vim.g.NERDTreeQuitOnOpen = 1

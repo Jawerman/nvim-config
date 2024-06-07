@@ -45,6 +45,11 @@ vim.g.mapleader = " "
 
 vim.opt.list = true
 
+vim.opt.completeopt = {'menuone', 'noselect'}
+
+-- default with no split on auto completion
+-- vim.opt.completeopt = {'menu'}
+
 -- show hidden characters
 -- vim.opt.listchars="nbsp:¬,extends:»,precedes:«,trail:•"
 --
