@@ -14,7 +14,8 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   -- 'wbthomason/packer.nvim',
   {
-    'nvim-telescope/telescope.nvim', tag = '0.1.6',
+    'nvim-telescope/telescope.nvim',
+    tag = '0.1.6',
     -- or                            , branch = '0.1.x',
     dependencies = {
       { 'nvim-lua/plenary.nvim' },
@@ -37,7 +38,16 @@ require("lazy").setup({
   },
   {
     'nvim-treesitter/nvim-treesitter',
-     build = ':TSUpdate',
+    build = ':TSUpdate',
+  },
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+    -- Optional dependencies
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function ()
+      require("oil").setup()
+    end
   },
   'nvim-treesitter/playground',
   'mbbill/undotree',
@@ -49,9 +59,12 @@ require("lazy").setup({
   'tpope/vim-commentary',
   'jiangmiao/auto-pairs',
   'justinmk/vim-sneak',
-  {'lewis6991/gitsigns.nvim', config = function ()
-    require('gitsigns').setup()
-  end},
+  {
+    'lewis6991/gitsigns.nvim',
+    config = function()
+      require('gitsigns').setup()
+    end
+  },
   'machakann/vim-highlightedyank',
   'editorconfig/editorconfig-vim',
   'Asheq/close-buffers.vim',

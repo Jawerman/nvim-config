@@ -47,13 +47,13 @@ lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
 lspconfig.tsserver.setup({
   init_options = {
     preferences = {
-      includeInlayParameterNameHints = 'all',
-      includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-      includeInlayFunctionParameterTypeHints = true,
-      includeInlayVariableTypeHints = true,
-      includeInlayPropertyDeclarationTypeHints = true,
-      includeInlayFunctionLikeReturnTypeHints = true,
-      includeInlayEnumMemberValueHints = true,
+      -- includeInlayParameterNameHints = 'all',
+      -- includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+      -- includeInlayFunctionParameterTypeHints = true,
+      -- includeInlayVariableTypeHints = true,
+      -- includeInlayPropertyDeclarationTypeHints = true,
+      -- includeInlayFunctionLikeReturnTypeHints = true,
+      -- includeInlayEnumMemberValueHints = true,
 
       -- other preferences...
       importModuleSpecifierPreference = 'relative',
