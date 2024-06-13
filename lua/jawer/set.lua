@@ -28,7 +28,7 @@ vim.opt.foldlevel=2
 -- remove swap using undo file
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undodir = (os.getenv("HOME") or os.getenv("UserProfile")) .. "/.vim/undodir"
 vim.opt.undofile = true
 
 vim.opt.termguicolors = true
