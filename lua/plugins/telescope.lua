@@ -2,15 +2,22 @@ return {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.3',
     -- or                            , branch = '0.1.x',
-    dependencies = {{'nvim-lua/plenary.nvim'}, {"nvim-telescope/telescope-live-grep-args.nvim"},
-                    {'molecule-man/telescope-menufacture'}},
+    dependencies = {
+        'nvim-lua/plenary.nvim',
+        'nvim-telescope/telescope-live-grep-args.nvim',
+        'molecule-man/telescope-menufacture',
+        'natecraddock/telescope-zf-native.nvim',
+    },
     config = function()
-        require("telescope").load_extension("live_grep_args")
-        require("telescope").load_extension("menufacture")
+        local telescope = require("telescope")
+        telescope.load_extension("live_grep_args")
+        telescope.load_extension("menufacture")
+        telescope.load_extension("zf-native")
+        
         local builtin = require('telescope.builtin')
-        local manufacture = require('telescope').extensions.menufacture;
+        local manufacture = telescope.extensions.menufacture;
 
-        require('telescope').setup {
+        telescope.setup {
             defaults = {
                 path_display = {"truncate"},
                 layout_strategy = "vertical",
