@@ -16,7 +16,22 @@ return {
         launch_scene = true,
       }
     }
-    local dap = require('dap')
+
+
+    -- local is_windows = vim.fn.has("win64") == 1 or vim.fn.has("win32") == 1 or vim.fn.has("win16") == 1
+    dap.adapters.codelldb = {
+      type = 'server',
+      host = '127.0.0.1',
+      port = 13000,
+      executable = {
+				command = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
+				args = {"--port", "13000"},
+
+				-- on windows you may have to uncomment this:
+				-- detached = false,
+			},
+    }
+
     
     vim.keymap.set("n", "<F5>", dap.continue, { desc = 'Debug: Start/Continue'})
     vim.keymap.set("n", "<F6>", function()

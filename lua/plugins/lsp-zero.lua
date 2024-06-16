@@ -37,8 +37,9 @@ return { {
     -- Mason setup
     require('mason').setup({})
     require('mason-lspconfig').setup({
-      ensure_installed = {},
+      ensure_installed = {'tsserver', 'angularls', 'lua_ls'},
       handlers = {
+        rust_analyzer = function() end,
         lsp_zero.default_setup,
         lua_ls = function()
           local lua_opts = lsp_zero.nvim_lua_ls()
@@ -77,7 +78,8 @@ return { {
       cmd = {"ncat", "localhost","6005"}
     end
     local pipe = '/path/to/godot.pipe' -- I use /tmp/godot.pipe
-    require 'lspconfig'.gdscript.setup({
+
+    lspconfig.gdscript.setup({
       name = 'Godot',
       cmd = cmd,
       root_dir = function()
