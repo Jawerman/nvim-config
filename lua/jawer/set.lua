@@ -47,6 +47,8 @@ vim.opt.list = true
 
 vim.opt.completeopt = {'menuone', 'noselect'}
 
+-- vim.cmd([[autocmd BufEnter term://* stopinsert]])
+
 -- default with no split on auto completion
 -- vim.opt.completeopt = {'menu'}
 

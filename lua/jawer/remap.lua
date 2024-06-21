@@ -31,7 +31,8 @@ vim.keymap.set("n", "<leader><tab>", ":b#<CR>")
 vim.keymap.set("v", "//", "y/\\V<C-R>=escape(@\",'/\')<CR><CR>")
 
 -- terminal
-vim.keymap.set("t", "<leader><Esc>", "<C-\\><C-n>")
+-- vim.keymap.set("t", "<leader><Esc>", "<C-\\><C-n>")
+vim.keymap.set("t", "<C-n>", "<C-\\><C-n>")
 
 -- hide search highlight
 vim.keymap.set("n", "<leader>sc", ":noh<CR>")
