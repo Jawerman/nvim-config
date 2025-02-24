@@ -22,6 +22,8 @@ return { -- Fuzzy Finder (files, lsp, etc)
     -- Useful for getting pretty icons, but requires a Nerd Font.
     { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
     "natecraddock/telescope-zf-native.nvim",
+    "princejoogie/dir-telescope.nvim",
+    -- "nvim-telescope/telescope-file-browser.nvim",
   },
   config = function()
     -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -144,6 +146,28 @@ return { -- Fuzzy Finder (files, lsp, etc)
         ["ui-select"] = {
           require("telescope.themes").get_dropdown(),
         },
+        ["dir-telescope"] = {
+          require("dir-telescope").setup({
+            -- these are the default options set
+            hidden = false,
+            no_ignore = false,
+            show_preview = true,
+            follow_symlinks = false,
+          }),
+        },
+        -- ["file_browser"] = {
+        --   theme = "ivy",
+        --   -- disables netrw and use telescope-file-browser in its place
+        --   hijack_netrw = true,
+        --   mappings = {
+        --     ["i"] = {
+        --       -- your custom insert mode mappings
+        --     },
+        --     ["n"] = {
+        --       -- your custom normal mode mappings
+        --     },
+        --   },
+        -- },
       },
     })
 

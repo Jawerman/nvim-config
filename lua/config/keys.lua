@@ -42,9 +42,9 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 -- TODO: maybe change current
 vim.keymap.set(
   "n",
-  "<leader>cp",
+  "<leader>dp",
   '<Cmd>let @+ = expand("%")<CR>',
-  { desc = "Copy current file path to clipboard", silent = true }
+  { desc = "[D]ocument path to clipboard", silent = true }
 )
 
 -- Easy navigate quickfix result
@@ -52,7 +52,6 @@ vim.keymap.set("n", "<C-j>", ":cn<CR>", { desc = "Next quickfix", silent = true 
 vim.keymap.set("n", "<C-k>", ":cp<CR>", { desc = "Previous quickfix", silent = true })
 
 -- Diagnostic keymaps
--- TODO: Check if the next two lines are neccessary, since I have quickfix navigation
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous [D]iagnostic message" })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next [D]iagnostic message" })
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostic [E]rror messages" })

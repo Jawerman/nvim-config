@@ -19,6 +19,7 @@ return { -- Collection of various small independent plugins/modules
     --   search_method = 'cover_or_next',
     -- }
 
+    require("mini.files").setup()
     -- Simple and easy statusline.
     --  You could remove this setup call if you don't like it,
     --  and try some other statusline plugin
