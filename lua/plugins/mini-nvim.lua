@@ -19,7 +19,9 @@ return { -- Collection of various small independent plugins/modules
     --   search_method = 'cover_or_next',
     -- }
 
+    -- File explorer
     require("mini.files").setup()
+
     -- Simple and easy statusline.
     --  You could remove this setup call if you don't like it,
     --  and try some other statusline plugin
@@ -35,6 +37,15 @@ return { -- Collection of various small independent plugins/modules
       return "%2l:%-2v"
     end
 
+    vim.keymap.set("n", "<leader>fm", function()
+      require("mini.files").open(vim.api.nvim_buf_get_name(0), true)
+    end, { desc = "[f]iles [m]ini" })
+
+    vim.keymap.set("n", "<leader>fM", function()
+      require("mini.files").open(vim.uv.cwd(), true)
+    end, { desc = "[f]iles [M]ini (cwd)" })
+
+    -- Keybindingf
     -- ... and there is more!
     --  Check out: https://github.com/echasnovski/mini.nvim
   end,

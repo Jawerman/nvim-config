@@ -188,16 +188,16 @@ return { -- Fuzzy Finder (files, lsp, etc)
 
     -- See `:help telescope.builtin`
     local builtin = require("telescope.builtin")
-    vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
-    vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-    vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-    vim.keymap.set("n", "<leader>s.", builtin.builtin, { desc = "[S]earch Telescope" })
-    vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
-    vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
-    vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
-    vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
-    vim.keymap.set("n", "<leader>so", builtin.oldfiles, { desc = "[S]earch [O]ld files" })
-    vim.keymap.set("n", "<leader>sb", builtin.buffers, { desc = "[S]earch existing [B]uffers" })
+    vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[s]earch [h]elp" })
+    vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[s]earch [k]eymaps" })
+    vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[s]earch [f]iles" })
+    vim.keymap.set("n", "<leader>s.", builtin.builtin, { desc = "[s]earch Telescope" })
+    vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[s]earch current [w]ord" })
+    vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[s]earch by [g]rep" })
+    vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[s]earch [d]iagnostics" })
+    vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[s]earch [r]esume" })
+    vim.keymap.set("n", "<leader>so", builtin.oldfiles, { desc = "[s]earch [o]ld files" })
+    vim.keymap.set("n", "<leader>sb", builtin.buffers, { desc = "[s]earch existing [b]uffers" })
     vim.keymap.set("n", "<leader>st", function()
       builtin.grep_string({
         shorten_path = true,
@@ -205,7 +205,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
         only_sort_text = true,
         search = "",
       })
-    end, { desc = "[S]earch [T]ext" })
+    end, { desc = "[s]earch [t]ext" })
 
     -- Slightly advanced example of overriding default behavior and theme
     vim.keymap.set("n", "<leader>/", function()
@@ -224,12 +224,12 @@ return { -- Fuzzy Finder (files, lsp, etc)
         grep_open_files = true,
         prompt_title = "Live Grep in Open Files",
       })
-    end, { desc = "[S]earch [/] in Open Files" })
+    end, { desc = "[s]earch [/] in Open Files" })
 
     -- Shortcut for searching your Neovim configuration files
     vim.keymap.set("n", "<leader>sn", function()
       builtin.find_files({ cwd = vim.fn.stdpath("config") })
-    end, { desc = "[S]earch [N]eovim files" })
+    end, { desc = "[s]earch [n]eovim files" })
     -- Shortcut for searching your Neovim configuration files
     --
   end,

@@ -33,6 +33,6 @@ return {
       },
     })
 
-    vim.keymap.set("n", "<leader>tt", ":NvimTreeFindFileToggle<CR>", { silent = true, desc = "[T]oggle [T]ree" })
+    vim.keymap.set("n", "<leader>ft", ":NvimTreeFindFileToggle<CR>", { silent = true, desc = "[f]iles [t]ree" })
   end,
 }
