@@ -20,7 +20,11 @@ return { -- Collection of various small independent plugins/modules
     -- }
 
     -- File explorer
-    require("mini.files").setup()
+    require("mini.files").setup({
+      windows = {
+        width_focus = 60,
+      },
+    })
 
     -- Simple and easy statusline.
     --  You could remove this setup call if you don't like it,

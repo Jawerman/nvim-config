@@ -6,10 +6,10 @@ return { -- Autocompletion
     {
       "L3MON4D3/LuaSnip",
       config = function()
-        -- local ls = require 'luasnip'
-        -- vim.keymap.set({ 'i' }, '<C-K>', function()
-        --   ls.expand()
-        -- end, { silent = true })
+        local ls = require("luasnip")
+        vim.keymap.set({ "i" }, "<C-K>", function()
+          ls.expand()
+        end, { silent = true })
       end,
       build = (function()
         -- Build Step is needed for regex support in snippets.

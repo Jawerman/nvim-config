@@ -204,8 +204,8 @@ return {
         },
         zls = {},
         ts_ls = {},
-        angularls = {},
-        gdtoolkit = {},
+        -- angularls = {},
+        -- gdtoolkit = {},
         --
         lua_ls = {
           -- cmd = {...},
