@@ -10,6 +10,8 @@ return { -- Autocompletion
         vim.keymap.set({ "i" }, "<C-K>", function()
           ls.expand()
         end, { silent = true })
+
+        require("../snippets/typescript")
       end,
       build = (function()
         -- Build Step is needed for regex support in snippets.

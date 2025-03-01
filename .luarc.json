@@ -1,0 +1,6 @@
+{
+    "diagnostics.globals": [
+        "filename_matches",
+        "is_test"
+    ]
+}
