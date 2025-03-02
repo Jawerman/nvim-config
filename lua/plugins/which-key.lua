@@ -50,6 +50,7 @@ return { -- Useful plugin to show you pending keybinds.
       { "<leader>b", group = "[b]uffer" },
       { "<leader>f", group = "[f]iles" },
       { "<leader>f", group = "[h]arpoon" },
+      { "<leader>u", group = "[u]ndo tree" },
       { "<leader>h", group = "[g]it hunks", mode = { "n", "v" } },
     },
   },

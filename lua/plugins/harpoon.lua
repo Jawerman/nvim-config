@@ -32,7 +32,7 @@ return {
 
     -- File Operations
     vim.keymap.set("n", "<leader>ha", function()
-      harpoon:list():append()
+      harpoon:list():add()
     end, { desc = "Harpoon: Add current file" })
     vim.keymap.set("n", "<leader>hl", function()
       harpoon.ui:toggle_quick_menu(harpoon:list())
