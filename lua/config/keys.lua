@@ -42,9 +42,9 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 -- TODO: maybe change current
 vim.keymap.set(
   "n",
-  "<leader>dp",
+  "<leader>fp",
   '<Cmd>let @+ = expand("%")<CR>',
-  { desc = "[d]ocument [p]ath to clipboard", silent = true }
+  { desc = "[f]ile [p]ath to clipboard", silent = true }
 )
 
 -- Easy navigate quickfix result

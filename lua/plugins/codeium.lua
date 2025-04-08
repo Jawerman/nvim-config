@@ -15,10 +15,10 @@ return {
       return vim.fn["codeium#CycleCompletions"](-1)
     end, { expr = true, silent = true, desc = "codeium prev" })
 
-    -- vim.keymap.set("i", "<c-j>", function()
-    --   return vim.fn["codeium#AcceptNextWord"]()
-    -- end, { expr = true, silent = true, desc = "codeium accept word" })
-    --
+    vim.keymap.set("i", "<c-j>", function()
+      return vim.fn["codeium#AcceptNextWord"]()
+    end, { expr = true, silent = true, desc = "codeium accept word" })
+
     vim.keymap.set("i", "<S-Tab>", function()
       return vim.fn["codeium#AcceptNextLine"]()
     end, { expr = true, silent = true, desc = "codeium accept line" })

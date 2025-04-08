@@ -130,15 +130,66 @@ return {
       },
     }
 
+    local is_windows = vim.fn.has("win64") == 1 or vim.fn.has("win32") == 1 or vim.fn.has("win16") == 1
+
+    if is_windows then
+      dap.adapters.cppdbg = {
+        id = "cppdbg",
+        type = "executable",
+        command = "C:\\absolute\\path\\to\\cpptools\\extension\\debugAdapters\\bin\\OpenDebugAD7.exe",
+        options = {
+          detached = false,
+        },
+      }
+    else
+      dap.adapters.cppdbg = {
+        id = "cppdbg",
+        type = "executable",
+        -- command = vim.fn.expand("$HOME/.local/share/nvim/mason/packages/cpptools/extension/debugAdapters/bin/OpenDebugAD7",),
+        command = vim.fn.expand("$HOME/.local/share/nvim/mason/bin/OpenDebugAD7"),
+      }
+    end
+
+    dap.configurations.cpp = {
+      {
+        name = "Launch file",
+        type = "cppdbg",
+        request = "launch",
+        program = function()
+          return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+        end,
+        cwd = "${workspaceFolder}",
+        stopAtEntry = true,
+      },
+      -- {
+      --   name = "Attach to gdbserver :1234",
+      --   type = "cppdbg",
+      --   request = "launch",
+      --   MIMode = "gdb",
+      --   miDebuggerServerAddress = "localhost:1234",
+      --   miDebuggerPath = "/usr/bin/gdb",
+      --   cwd = "${workspaceFolder}",
+      --   program = function()
+      --     return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+      --   end,
+      -- },
+    }
+
+    dap.configurations.odin = dap.configurations.cpp
+
     -- Basic debugging keymaps, feel free to change to your liking!
     vim.keymap.set("n", "<F5>", dap.continue, { desc = "Debug: Start/Continue" })
     vim.keymap.set("n", "<F1>", dap.step_into, { desc = "Debug: Step Into" })
     vim.keymap.set("n", "<F2>", dap.step_over, { desc = "Debug: Step Over" })
     vim.keymap.set("n", "<F3>", dap.step_out, { desc = "Debug: Step Out" })
-    vim.keymap.set("n", "<leader>tb", dap.toggle_breakpoint, { desc = "Debug: [t]oggle [b]reakpoint" })
-    vim.keymap.set("n", "<leader>B", function()
+    vim.keymap.set("n", "<F9>", dap.toggle_breakpoint, { desc = "Debug: toggle breakpoint" })
+    vim.keymap.set("n", "<F10>", function()
       dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
     end, { desc = "Debug: Set Breakpoint" })
+    -- vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Debug: [t]oggle [b]reakpoint" })
+    -- vim.keymap.set("n", "<leader>B", function()
+    --   dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+    -- end, { desc = "Debug: Set Breakpoint" })
 
     dapui.setup()
 
