@@ -97,7 +97,9 @@ return {
 
           -- Opens a popup that displays documentation about the word under your cursor
           --  See `:help K` for why this keymap.
-          map("K", vim.lsp.buf.hover, "Hover Documentation")
+          map("K", function()
+            vim.lsp.buf.hover({ border = "rounded" })
+          end, "Hover Documentation")
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
@@ -203,6 +205,7 @@ return {
           },
         },
         zls = {},
+        ols = {},
         ts_ls = {},
         -- angularls = {},
         -- gdtoolkit = {},
@@ -254,6 +257,7 @@ return {
       vim.list_extend(ensure_installed, {
         "stylua", -- Used to format Lua code
         "gdtoolkit",
+        "ols",
       })
       require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
