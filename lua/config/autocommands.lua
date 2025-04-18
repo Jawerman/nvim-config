@@ -9,9 +9,14 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
--- Para LSP (hover)
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = "single", -- Opciones: "none", "single", "double", "rounded", "solid", "shadow"
+-- Deactivating treesitter folding for too large files
+vim.api.nvim_create_autocmd("BufReadPre", {
+  pattern = "*",
+  callback = function()
+    if vim.fn.getfsize(vim.fn.expand("%")) > 1000000 then
+      vim.opt_local.foldmethod = "manual"
+    end
+  end,
 })
 
 -- vim.api.nvim_create_autocmd("LspAttach", {
@@ -22,5 +27,16 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
 --     if client and client:supports_method("textDocument/completion") then
 --       vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
 --     end
+--   end,
+-- })
+--
+
+-- Deactivating treesitter folding for txt files
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "txt",
+--   callback = function()
+--     vim.opt_local.foldmethod = "manual"
+--     -- deactivate syntax highlighting
+--     --vim.cmd("syntax off")
 --   end,
 -- })

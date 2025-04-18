@@ -79,3 +79,8 @@ vim.diagnostic.config({
 })
 -- vim.o.winborder = "solid"
 vim.o.background = "dark" -- or "light" for light mode
+
+-- folding
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldenable = false
