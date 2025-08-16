@@ -25,7 +25,7 @@ return { -- Autoformat
     end,
     formatters_by_ft = {
       lua = { "stylua" },
-      gdscript = { "gdtoolkit" },
+      gdscript = { "gdformat" },
       markdown = { "prettier" },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
@@ -33,6 +33,13 @@ return { -- Autoformat
       -- You can use a sub-list to tell conform to run *until* a formatter
       -- is found.
       -- javascript = { { "prettierd", "prettier" } },
+    },
+    formatters = {
+      gdformat = {
+        command = vim.fn.stdpath("data") .. "/mason/bin/gdformat",
+        args = { "$FILENAME" },
+        stdin = false,
+      },
     },
   },
 }

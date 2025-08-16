@@ -260,6 +260,20 @@ return {
             completion = {
               callSnippet = "Replace",
             },
+            -- Extra configs
+            runtime = {
+              version = "LuaJIT", -- Neovim uses LuaJIT
+            },
+            diagnostics = {
+              globals = { "vim" }, -- List of global variables
+            },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+              checkThirdParty = false,
+            },
+            telemetry = {
+              enable = false,
+            },
             -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
             -- diagnostics = { disable = { 'missing-fields' } },
           },
