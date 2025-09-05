@@ -141,10 +141,20 @@ return { -- Fuzzy Finder (files, lsp, etc)
           fname_width = 0.5,
           show_line = false,
         },
+        lsp_code_actions = {
+          fname_width = 0.5,
+          show_line = false,
+        },
       },
       extensions = {
         ["ui-select"] = {
-          require("telescope.themes").get_dropdown(),
+          require("telescope.themes").get_dropdown({
+            -- sorting_strategy = "ascending",
+            layout_strategy = "bottom_pane",
+            layout_config = {
+              height = 8,
+            },
+          }),
         },
         ["dir-telescope"] = {
           require("dir-telescope").setup({

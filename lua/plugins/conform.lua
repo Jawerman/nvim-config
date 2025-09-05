@@ -17,6 +17,7 @@ return { -- Autoformat
       -- Disable "format_on_save lsp_fallback" for languages that don't
       -- have a well standardized coding style. You can add additional
       -- languages here or re-enable it for the disabled ones.
+      print("format_on_save", vim.bo[bufnr].filetype)
       local disable_filetypes = { c = true, cpp = true }
       return {
         timeout_ms = 500,
@@ -27,6 +28,9 @@ return { -- Autoformat
       lua = { "stylua" },
       gdscript = { "gdformat" },
       markdown = { "prettier" },
+      -- typescript = { "eslint_d", "prettier", stop_after_first = true },
+      html = { "prettier", "prettierd" },
+      htmlangular = { "prettier", "prettierd" },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --
@@ -42,4 +46,19 @@ return { -- Autoformat
       },
     },
   },
+  -- config = function(_, opts)
+  --   require("conform").setup(opts)
+  --
+  --   -- Autocmd manual para que HTML se formatee al guardar
+  --   vim.api.nvim_create_autocmd("BufWritePre", {
+  --     pattern = "*.html",
+  --     callback = function(args)
+  --       require("conform").format({
+  --         bufnr = args.buf,
+  --         timeout_ms = 500,
+  --         lsp_fallback = true,
+  --       })
+  --     end,
+  --   })
+  -- end,
 }

@@ -19,6 +19,13 @@ vim.api.nvim_create_autocmd("BufReadPre", {
   end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "dap-float",
+  callback = function()
+    vim.keymap.set("n", "q", "<Cmd>close<CR>", { buffer = true, silent = true, desc = "Cerrar popup DAP" })
+  end,
+})
+
 -- vim.api.nvim_create_autocmd("LspAttach", {
 --   desc = "Enable completion triggered by <c-x><c-o>",
 --   group = vim.api.nvim_create_augroup("kickstart-completion", { clear = true }),

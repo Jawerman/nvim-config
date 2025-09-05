@@ -23,10 +23,13 @@ return {
 
     -- Add your own debuggers here
     "leoluz/nvim-dap-go",
+    -- Minimalistic ui
+    "igorlfs/nvim-dap-view",
   },
   config = function()
     local dap = require("dap")
-    local dapui = require("dapui")
+    local dap_ui = require("dapui")
+    local dap_view = require("dap-view")
 
     require("mason-nvim-dap").setup({
       -- Makes a best effort to setup the various debuggers with
@@ -45,6 +48,7 @@ return {
         "codelldb",
         "cpptools",
         "lldb",
+        "pwa-node",
       },
     })
 
@@ -150,6 +154,16 @@ return {
       }
     end
 
+    dap.adapters["pwa-node"] = {
+      type = "server",
+      host = "localhost",
+      port = "${port}",
+      executable = {
+        command = "js-debug-adapter",
+        args = { "${port}" },
+      },
+    }
+
     dap.configurations.cpp = {
       {
         name = "Launch file",
@@ -179,19 +193,61 @@ return {
 
     -- Basic debugging keymaps, feel free to change to your liking!
     vim.keymap.set("n", "<F5>", dap.continue, { desc = "Debug: Start/Continue" })
+    vim.keymap.set("n", "<F4>", dap.terminate, { desc = "Debug: End" })
     vim.keymap.set("n", "<F1>", dap.step_into, { desc = "Debug: Step Into" })
     vim.keymap.set("n", "<F2>", dap.step_over, { desc = "Debug: Step Over" })
     vim.keymap.set("n", "<F3>", dap.step_out, { desc = "Debug: Step Out" })
-    vim.keymap.set("n", "<F9>", dap.toggle_breakpoint, { desc = "Debug: toggle breakpoint" })
-    vim.keymap.set("n", "<F10>", function()
+
+    vim.keymap.set("n", "<leader>dB", function()
       dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
-    end, { desc = "Debug: Set Breakpoint" })
+    end, { desc = "[d]ebug [Breakpoint] condition" })
     -- vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Debug: [t]oggle [b]reakpoint" })
     -- vim.keymap.set("n", "<leader>B", function()
     --   dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
     -- end, { desc = "Debug: Set Breakpoint" })
 
-    dapui.setup()
+    vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "[d]ebug [b]reakpoint" })
+    dap_ui.setup({
+      layouts = {
+        {
+          elements = {
+            {
+              id = "scopes",
+              size = 0.25,
+            },
+            {
+              id = "breakpoints",
+              size = 0.25,
+            },
+            {
+              id = "stacks",
+              size = 0.25,
+            },
+            {
+              id = "watches",
+              size = 0.25,
+            },
+          },
+          position = "left",
+          size = 80,
+        },
+        {
+          elements = {
+            {
+              id = "repl",
+              size = 0.5,
+            },
+            {
+              id = "console",
+              size = 0.5,
+            },
+          },
+          position = "bottom",
+          size = 10,
+        },
+      },
+    })
+    dap_view.setup()
 
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
@@ -216,16 +272,24 @@ return {
     -- }
 
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
-    vim.keymap.set("n", "<F7>", dapui.toggle, { desc = "Debug: See last session result." })
+    vim.keymap.set("n", "<F7>", dap_ui.toggle, { desc = "Debug: Toggle dap ui" })
+    vim.keymap.set("n", "<F6>", "<Cmd>DapViewToggle<CR>", { desc = "Debug: Toggle dap view", silent = true })
+    vim.keymap.set(
+      { "n", "v" },
+      "<leader>de",
+      "<cmd>lua require('dap.ui.widgets').hover()<CR>",
+      { desc = "[d]ebug [e]valuate" }
+    )
+    vim.keymap.set({ "n", "v" }, "<leader>dw", "<cmd>DapViewWatch<CR>", { desc = "[d]ebug [w]atch" })
 
     dap.defaults.fallback.external_terminal = {
       command = "alacritty.exe",
       args = { "-e" },
     }
 
-    dap.listeners.after.event_initialized["dapui_config"] = dapui.open
-    dap.listeners.before.event_terminated["dapui_config"] = dapui.close
-    dap.listeners.before.event_exited["dapui_config"] = dapui.close
+    -- dap.listeners.after.event_initialized["dapui_config"] = dapui.open
+    -- dap.listeners.before.event_terminated["dapui_config"] = dapui.close
+    -- dap.listeners.before.event_exited["dapui_config"] = dapui.close
 
     -- Install golang specific config
     require("dap-go").setup({

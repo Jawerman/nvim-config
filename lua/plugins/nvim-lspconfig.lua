@@ -178,6 +178,7 @@ return {
         },
       } or {},
       virtual_text = {
+        current_line = true,
         source = "if_many",
         spacing = 2,
         format = function(diagnostic)
@@ -192,6 +193,8 @@ return {
       },
     })
 
+    local lspconfig = require("lspconfig")
+    local util = require("lspconfig.util")
     -- LSP servers and clients are able to communicate to each other what features they support.
     --  By default, Neovim doesn't support everything that is in the LSP specification.
     --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
@@ -218,39 +221,71 @@ return {
       --    https://github.com/pmizio/typescript-tools.nvim
       --
       -- But for many setups, the LSP (`ts_ls`) will work just fine
-      ts_ls = {
+      -- ts_ls = {
+      --   settings = {
+      --     typescript = {
+      --       -- tsdk = vim.fs.dirname(vim.fs.find({ "node_modules/typescript/lib" }, { upward = true })[1]),
+      --       -- preferences = {
+      --       --   tsConfigFile = "tsconfig.strict.json",
+      --       -- },
+      --       inlayHints = {
+      --         includeInlayParameterNameHints = "all",
+      --         includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+      --         includeInlayFunctionParameterTypeHints = true,
+      --         includeInlayVariableTypeHints = true,
+      --         includeInlayPropertyDeclarationTypeHints = true,
+      --         includeInlayFunctionLikeReturnTypeHints = true,
+      --         includeInlayEnumMemberValueHints = true,
+      --       },
+      --     },
+      --     javascript = {
+      --       inlayHints = {
+      --         includeInlayParameterNameHints = "all",
+      --         includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+      --         includeInlayFunctionParameterTypeHints = true,
+      --         includeInlayVariableTypeHints = true,
+      --         includeInlayPropertyDeclarationTypeHints = true,
+      --         includeInlayFunctionLikeReturnTypeHints = true,
+      --         includeInlayEnumMemberValueHints = true,
+      --       },
+      --     },
+      --   },
+      --
+      --   on_new_config = function(new_config, new_root_dir)
+      --     new_config.settings.typescript.tsdk =
+      --       vim.fs.dirname(vim.fs.find({ "node_modules/typescript/lib" }, { upward = true })[1])
+      --
+      --     -- Forzar el uso de tsconfig-strict.json cuando Mason inicie el servidor
+      --     if new_root_dir then
+      --       local strict_config = vim.fs.joinpath(new_root_dir, "tsconfig-strict.json")
+      --       if vim.fn.filereadable(strict_config) == 1 then
+      --         -- Configurar en settings para que Mason lo respete
+      --         new_config.settings.typescript.preferences = new_config.settings.typescript.preferences or {}
+      --         new_config.settings.typescript.preferences.tsConfigFile = strict_config
+      --       end
+      --     end
+      --   end,
+      -- },
+      vtsls = {
         settings = {
           typescript = {
             inlayHints = {
-              includeInlayParameterNameHints = "all",
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayEnumMemberValueHints = true,
-            },
-          },
-          javascript = {
-            inlayHints = {
-              includeInlayParameterNameHints = "all",
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayEnumMemberValueHints = true,
+              parameterNames = { enabled = "all" },
+              parameterTypes = { enabled = true },
+              variableTypes = { enabled = true },
+              propertyDeclarationTypes = { enabled = true },
+              functionLikeReturnTypes = { enabled = true },
+              enumMemberValues = { enabled = true },
             },
           },
         },
+      },
+      eslint = {
         on_attach = function(client, bufnr)
-          if vim.lsp.inlay_hint then
-            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-          end
+          client.server_capabilities.documentFormattingProvider = false
+          -- Optional: set up keybindings or autocommands here
         end,
       },
-      --
-
       lua_ls = {
         -- cmd = { ... },
         -- filetypes = { ... },
@@ -298,17 +333,30 @@ return {
       },
     }
 
+    require("mason-lspconfig").setup({
+      ensure_installed = vim.tbl_keys(servers),
+      automatic_enable = true,
+    })
+
+    -- lspconfig.angularls.setup({
+    --   root_dir = function(fname)
+    --     return util.root_pattern("tsconfig-strict.json", ".git")(fname) or util.root_pattern(".")(fname)
+    --   end,
+    -- })
+
     -- The following loop will configure each server with the capabilities we defined above.
     -- This will ensure that all servers have the same base configuration, but also
     -- allow for server-specific overrides.
     for server_name, server_config in pairs(servers) do
       server_config.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server_config.capabilities or {})
-      require("lspconfig")[server_name].setup(server_config)
+      lspconfig[server_name].setup(server_config)
+      vim.lsp.config(server_name, server_config)
     end
 
     for server_name, server in pairs(non_mason_servers) do
       server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-      require("lspconfig")[server_name].setup(server)
+      lspconfig[server_name].setup(server)
+      vim.lsp.config(server_name, server)
     end
 
     -- Ensure the servers and tools above are installed
@@ -324,10 +372,10 @@ return {
     --
     -- You can add other tools here that you want Mason to install
     -- for you, so that they are available from within Neovim.
-    local ensure_installed = vim.tbl_keys(servers or {})
-    vim.list_extend(ensure_installed, {
-      "stylua", -- Used to format Lua code
-    })
-    require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+    -- local ensure_installed = vim.tbl_keys(servers or {})
+    -- vim.list_extend(ensure_installed, {
+    --   "stylua", -- Used to format Lua code
+    -- })
+    -- require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
   end,
 }

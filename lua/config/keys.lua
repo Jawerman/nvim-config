@@ -47,16 +47,26 @@ vim.keymap.set(
   { desc = "[f]ile [p]ath to clipboard", silent = true }
 )
 
+vim.keymap.set(
+  "n",
+  "<leader>fn",
+  '<Cmd>let @+ = expand("%:t")<CR>',
+  { desc = "[f]ile [n]ame to clipboard", silent = true }
+)
+
+-- non destructive copy
+vim.keymap.set("x", "P", '"_dP')
+
 -- Easy navigate quickfix result
 vim.keymap.set("n", "<C-j>", ":cn<CR>", { desc = "Next quickfix", silent = true })
 vim.keymap.set("n", "<C-k>", ":cp<CR>", { desc = "Previous quickfix", silent = true })
 
 -- Diagnostic keymaps
-vim.keymap.set("n", "[d", function()
+vim.keymap.set("n", "<C-p>", function()
   vim.diagnostic.jump({ count = -1 })
 end, { desc = "Go to previous [d]iagnostic message" })
 
-vim.keymap.set("n", "]d", function()
+vim.keymap.set("n", "<C-n>", function()
   vim.diagnostic.jump({ count = 1 })
 end, { desc = "Go to next [d]iagnostic message" })
 
@@ -72,3 +82,15 @@ vim.keymap.set("n", "<leader>tn", function()
     vim.wo.number = true
   end
 end, { desc = "[t]oggle line [n]umbers mode" })
+
+vim.keymap.set("n", "<leader>tl", function()
+  local virtual_lines = vim.diagnostic.config().virtual_lines
+  if virtual_lines then
+    virtual_lines = false
+  else
+    virtual_lines = { current_line = true }
+  end
+  vim.diagnostic.config({
+    virtual_lines = virtual_lines,
+  })
+end, { desc = "[t]oggle virtual [l]ines" })
