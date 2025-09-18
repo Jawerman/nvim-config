@@ -5,16 +5,16 @@ return { -- Fuzzy Finder (files, lsp, etc)
   dependencies = {
     "nvim-lua/plenary.nvim",
     -- { -- If encountering errors, see telescope-fzf-native README for installation instructions
-    --   'nvim-telescope/telescope-fzf-native.nvim',
+    --   "nvim-telescope/telescope-fzf-native.nvim",
     --
     --   -- `build` is used to run some command when the plugin is installed/updated.
     --   -- This is only run then, not every time Neovim starts up.
-    --   build = 'make',
+    --   build = "make",
     --
     --   -- `cond` is a condition used to determine whether this plugin should be
     --   -- installed and loaded.
     --   cond = function()
-    --     return vim.fn.executable 'make' == 1
+    --     return vim.fn.executable("make") == 1
     --   end,
     -- },
     { "nvim-telescope/telescope-ui-select.nvim" },
@@ -196,11 +196,94 @@ return { -- Fuzzy Finder (files, lsp, etc)
       end,
     })
 
-    -- See `:help telescope.builtin`
     local builtin = require("telescope.builtin")
+    -- local sorters = require("telescope.sorters")
+
+    -- Custom functions
+    local function grep_quickfix(additional_args)
+      -- Get quickfix list
+      local qf_list = vim.fn.getqflist()
+      local files_set = {}
+
+      -- Extract unique file paths from quickfix entries
+      for _, item in ipairs(qf_list) do
+        if item.bufnr and vim.api.nvim_buf_is_valid(item.bufnr) then
+          local path = vim.api.nvim_buf_get_name(item.bufnr)
+          if path ~= "" then
+            files_set[path] = true
+          end
+        end
+      end
+
+      -- Convert set to list
+      local unique_files = {}
+      for f, _ in pairs(files_set) do
+        table.insert(unique_files, f)
+      end
+
+      -- Run live_grep only on those files
+      builtin.live_grep({
+        search_dirs = unique_files,
+        prompt_title = "Live grep quickfix",
+        additional_args = type(additional_args) == "function" and additional_args or function()
+          return additional_args or {}
+        end,
+      })
+    end
+
+    local pickers = require("telescope.pickers")
+    local finders = require("telescope.finders")
+    local sorters = require("telescope.sorters")
+    local conf = require("telescope.config").values
+    local actions = require("telescope.actions")
+    local action_state = require("telescope.actions.state")
+
+    local function live_wildcard_search(opts)
+      opts = opts or {}
+      opts.cwd = opts.cwd or vim.loop.cwd()
+
+      pickers
+        .new(opts, {
+          prompt_title = "Live Wildcard Search",
+          cwd = opts.cwd,
+          sorter = sorters.empty(),
+          previewer = conf.file_previewer(opts),
+
+          finder = finders.new_job(function(prompt)
+            local args = { "rg", "--files", "-g", prompt }
+            return args
+          end, nil, opts.max_results or 10000000),
+
+          attach_mappings = function(_, map)
+            map("i", "<CR>", function(bufnr)
+              local entry = action_state.get_selected_entry()
+              actions.close(bufnr)
+              vim.cmd.edit(vim.fn.fnameescape(entry[1]))
+            end)
+            return true
+          end,
+        })
+        :find()
+    end
+
+    -- buffer/log mínimo para depurar en una ventana scratch
+    local function get_trace_buf()
+      if not vim.g.__fw_trace_buf or not vim.api.nvim_buf_is_valid(vim.g.__fw_trace_buf) then
+        vim.g.__fw_trace_buf = vim.api.nvim_create_buf(false, true)
+        vim.api.nvim_buf_set_name(vim.g.__fw_trace_buf, "FW_TRACE")
+      end
+      return vim.g.__fw_trace_buf
+    end
+    -- Examples of usage:
+    -- grep_quickfix({ "-F" })                  -- literal search
+    -- grep_quickfix({ "-g*.lua" })             -- only in .lua files
+
+    -- See `:help telescope.builtin`
+    -- Keymap to launch the picker
     vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[s]earch [h]elp" })
     vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[s]earch [k]eymaps" })
     vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[s]earch [f]iles" })
+    vim.keymap.set("n", "<leader>sF", live_wildcard_search, { desc = "[s]earch [f]iles" })
     vim.keymap.set("n", "<leader>s.", builtin.builtin, { desc = "[s]earch Telescope" })
     vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[s]earch current [w]ord" })
     vim.keymap.set("n", "<leader>sl", builtin.live_grep, { desc = "[s]earch [l]ive grep" })
@@ -209,14 +292,27 @@ return { -- Fuzzy Finder (files, lsp, etc)
     vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[s]earch [r]esume" })
     vim.keymap.set("n", "<leader>so", builtin.oldfiles, { desc = "[s]earch [o]ld files" })
     vim.keymap.set("n", "<leader>sb", builtin.buffers, { desc = "[s]earch existing [b]uffers" })
+    vim.keymap.set("n", "<leader>sq", function()
+      grep_quickfix({ "-F" })
+    end, { desc = "[s]earch [q]uickfix" })
+
+    -- vim.keymap.set("n", "<leader>sq", function()
+    --   grep_quickfix({ "-F" })
+    -- end, { desc = "[s]earch [q]uickfix" })
+
     vim.keymap.set("n", "<leader>st", function()
-      builtin.grep_string({
-        shorten_path = true,
-        word_match = "-w",
-        only_sort_text = true,
-        search = "",
+      builtin.live_grep({
+        additional_args = { "-F" },
       })
     end, { desc = "[s]earch [t]ext" })
+    -- vim.keymap.set("n", "<leader>st", function()
+    --   builtin.grep_string({
+    --     shorten_path = true,
+    --     word_match = "-w",
+    --     only_sort_text = true,
+    --     search = "",
+    --   })
+    -- end, { desc = "[s]earch [t]ext" })
 
     -- Slightly advanced example of overriding default behavior and theme
     vim.keymap.set("n", "<leader>/", function()

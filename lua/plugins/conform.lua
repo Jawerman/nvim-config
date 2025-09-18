@@ -17,11 +17,25 @@ return { -- Autoformat
       -- Disable "format_on_save lsp_fallback" for languages that don't
       -- have a well standardized coding style. You can add additional
       -- languages here or re-enable it for the disabled ones.
-      print("format_on_save", vim.bo[bufnr].filetype)
-      local disable_filetypes = { c = true, cpp = true }
+      local filetype = vim.bo[bufnr].filetype
+
+      -- print("format_on_save", filetype)
+      local disable_formatting_filetypes = {
+        typescript = true,
+        javascript = true,
+        html = true,
+      }
+      local disable_fallback_filetypes = { c = true, cpp = true }
+
+      if disable_formatting_filetypes[filetype] then
+        -- print("Formateo totalmente deshabilitado para:", filetype)
+        return nil
+      end
+
       return {
-        timeout_ms = 500,
-        lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+        -- timeout_ms = 500,
+        timeout_ms = 3000,
+        lsp_fallback = not disable_fallback_filetypes[filetype],
       }
     end,
     formatters_by_ft = {
@@ -29,6 +43,7 @@ return { -- Autoformat
       gdscript = { "gdformat" },
       markdown = { "prettier" },
       -- typescript = { "eslint_d", "prettier", stop_after_first = true },
+      typescript = { "eslint_d", "prettier" },
       html = { "prettier", "prettierd" },
       htmlangular = { "prettier", "prettierd" },
       -- Conform can also run multiple formatters sequentially
