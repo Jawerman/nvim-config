@@ -189,10 +189,11 @@ return {
         -- root_dir = function()
         --   return vim.fs.dirname(vim.fs.find({ "project.godot", ".git" }, { upward = true })[1])
         -- end,
-        on_attach = function(client, bufnr)
-          print("Connected to Godot LSP ✔️")
-        end,
+        -- on_attach = function(client, bufnr)
+        --   print("Connected to Godot LSP ✔️")
+        -- end,
       },
+      c3_lsp = {},
     }
 
     for name, cfg in pairs(non_mason_servers) do
