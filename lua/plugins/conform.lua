@@ -41,11 +41,14 @@ return { -- Autoformat
     formatters_by_ft = {
       lua = { "stylua" },
       gdscript = { "gdformat" },
-      markdown = { "prettier" },
+      markdown = { "prettier", "prettierd" },
+      md = { "prettier", "prettierd" },
       -- typescript = { "eslint_d", "prettier", stop_after_first = true },
       typescript = { "eslint_d", "prettier" },
       html = { "prettier", "prettierd" },
       htmlangular = { "prettier", "prettierd" },
+      json = { "prettier" },
+      jsonc = { "prettier", "prettierd" },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --

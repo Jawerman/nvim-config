@@ -79,3 +79,5 @@ vim.o.background = "dark" -- or "light" for light mode
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.foldenable = false
+
+vim.g.neovide_scale_factor = 0.75

@@ -35,6 +35,9 @@ return {
     local dap = require("dap")
     local dap_ui = require("dapui")
     local dap_view = require("dap-view")
+    local mason_data = vim.fn.stdpath("data")
+
+    require("dap").set_log_level("TRACE")
 
     require("nvim-dap-virtual-text").setup()
 
@@ -60,7 +63,7 @@ return {
     })
 
     require("dap-vscode-js").setup({
-      debugger_path = vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter",
+      debugger_path = mason_data .. "/mason/packages/js-debug-adapter",
       adapters = { "pwa-node", "pwa-chrome" },
     })
 
@@ -72,7 +75,7 @@ return {
       executable = {
         command = "node",
         args = {
-          vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
+          mason_data .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
           "${port}",
         },
       },
@@ -128,7 +131,13 @@ return {
     --   },
     -- }
     --
-    --
+
+    dap.adapters.lldb = {
+      type = "executable",
+      command = mason_data .. "\\mason\\packages\\codelldb\\extension\\adapter\\codelldb.exe",
+      name = "lldb",
+    }
+
     local chrome_attach_config = {
       {
         name = "Attach to Chrome (Web App)",
@@ -182,17 +191,20 @@ return {
       dap.adapters.cppdbg = {
         id = "cppdbg",
         type = "executable",
-        command = "C:\\absolute\\path\\to\\cpptools\\extension\\debugAdapters\\bin\\OpenDebugAD7.exe",
+        cwd = "${workspaceFolder}",
+        command = mason_data .. "\\mason\\packages\\cpptools\\extension\\debugAdapters\\bin\\OpenDebugAD7.exe",
         options = {
           detached = false,
         },
+        MIMode = "gdb",
+        miDebuggerPath = mason_data .. "\\mason\\packages\\gdb\\bin\\gdb.exe",
       }
     else
       dap.adapters.cppdbg = {
         id = "cppdbg",
         type = "executable",
         -- command = vim.fn.expand("$HOME/.local/share/nvim/mason/packages/cpptools/extension/debugAdapters/bin/OpenDebugAD7",),
-        command = vim.fn.expand("$HOME/.local/share/nvim/mason/bin/OpenDebugAD7"),
+        command = vim.fn.expand("$HOME/.local/share/nvim/mason/bin/OpenDebugMIDebuggerPathAD7"),
       }
     end
 
@@ -206,30 +218,35 @@ return {
       },
     }
 
-    dap.configurations.cpp = {
-      {
-        name = "Launch file",
-        type = "cppdbg",
-        request = "launch",
-        program = function()
-          return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-        end,
-        cwd = "${workspaceFolder}",
-        stopAtEntry = true,
-      },
-      -- {
-      --   name = "Attach to gdbserver :1234",
-      --   type = "cppdbg",
-      --   request = "launch",
-      --   MIMode = "gdb",
-      --   miDebuggerServerAddress = "localhost:1234",
-      --   miDebuggerPath = "/usr/bin/gdb",
-      --   cwd = "${workspaceFolder}",
-      --   program = function()
-      --     return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-      --   end,
-      -- },
-    }
+    if is_windows then
+      dap.configurations.cpp = {
+        {
+          name = "Launch file",
+          type = "lldb",
+          request = "launch",
+          program = function()
+            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+          end,
+          cwd = vim.fn.getcwd(),
+          stopOnEntry = false,
+          args = {},
+          runInTerminal = false,
+        },
+      }
+    else
+      dap.configurations.cpp = {
+        {
+          name = "Launch file",
+          type = "cppdbg",
+          request = "launch",
+          program = function()
+            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+          end,
+          cwd = "${workspaceFolder}",
+          stopAtEntry = true,
+        },
+      }
+    end
 
     dap.configurations.odin = dap.configurations.cpp
 
@@ -324,7 +341,7 @@ return {
     vim.keymap.set(
       { "n", "v" },
       "<leader>de",
-      "<cmd>lua require('dap.ui.widgets').hover()<CR>",
+      "<cmd>lua require('dap.ui.widgets').hover(nil, { border = 'rounded'})<CR>",
       { desc = "[d]ebug [e]valuate" }
     )
     vim.keymap.set({ "n", "v" }, "<leader>dw", "<cmd>DapViewWatch<CR>", { desc = "[d]ebug [w]atch" })
