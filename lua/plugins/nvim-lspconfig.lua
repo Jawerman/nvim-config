@@ -193,6 +193,7 @@ return {
         --   print("Connected to Godot LSP ✔️")
         -- end,
       },
+      c3_lsp = {},
     }
 
     for name, cfg in pairs(non_mason_servers) do
