@@ -26,6 +26,13 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "markdown",
+--   callback = function()
+--     vim.opt_local.conceallevel = 2
+--   end,
+-- })
+
 -- vim.api.nvim_create_autocmd("LspAttach", {
 --   desc = "Enable completion triggered by <c-x><c-o>",
 --   group = vim.api.nvim_create_augroup("kickstart-completion", { clear = true }),

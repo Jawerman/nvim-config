@@ -25,6 +25,7 @@ return {
       },
       filters = {
         dotfiles = true,
+        custom = { "^.*\\.uid$" }, -- Esto oculta cualquier archivo que termine en .uid
       },
       actions = {
         open_file = {

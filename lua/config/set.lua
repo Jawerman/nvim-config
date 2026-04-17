@@ -76,6 +76,9 @@ vim.opt.hlsearch = true
 vim.o.background = "dark" -- or "light" for light mode
 
 -- folding
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldenable = false
+-- vim.opt.foldmethod = "expr"
+-- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- vim.opt.foldenable = false
+
+-- Color column
+vim.opt.colorcolumn = "100"

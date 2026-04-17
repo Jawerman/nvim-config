@@ -57,6 +57,9 @@ return { -- Fuzzy Finder (files, lsp, etc)
       --   },
       -- },
       defaults = {
+        file_ignore_patterns = {
+          "%.uid", -- El % es necesario para escapar el punto en Lua patterns
+        },
         winblend = 10,
         path_display = { "truncate" },
         layout_strategy = "vertical",
