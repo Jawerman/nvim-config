@@ -54,6 +54,22 @@ vim.keymap.set(
   { desc = "[f]ile [n]ame to clipboard", silent = true }
 )
 
+-- Si estás en MODO NORMAL (Copia línea individual)
+vim.keymap.set(
+  "n",
+  "<leader>fl",
+  '<Cmd>let @+ = expand("%:.") .. ":" .. line(".")<CR>',
+  { desc = "[f]ile and [l]ine to clipboard", silent = true }
+)
+
+-- Si estás en MODO VISUAL (Copia rango de líneas)
+vim.keymap.set(
+  "v",
+  "<leader>fl",
+  '<Cmd>let @+ = expand("%:.") .. ":" .. line("v") .. "-" .. line(".")<CR>',
+  { desc = "[f]ile and [l]ine range to clipboard", silent = true }
+)
+
 -- non destructive copy
 vim.keymap.set("x", "P", '"_dP')
 
